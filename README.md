@@ -5,7 +5,7 @@
 ## Setup
 
 ```
-npm run install
+npm install
 ```
 
 ## Run

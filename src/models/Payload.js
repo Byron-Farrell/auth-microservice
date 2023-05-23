@@ -22,6 +22,7 @@ function Payload (success, message, data=undefined) {
  */
 Payload.prototype.addError = function (field, message) {
 
+    // If payload does not have an error array create one
     if (!Object.hasOwn(this.payload, 'errors')) {
         this.payload.errors = []
     }

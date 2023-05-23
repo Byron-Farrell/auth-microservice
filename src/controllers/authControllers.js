@@ -4,14 +4,13 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User');
 const Payload = require('../models/Payload')
 const authConfig = require('../config/auth')
-const userSerializers = require('../serializers/userSerializers');
 
 /**
  * A POST method that takes a JSON object and validates the user information in said object.
  * If all validations pass, a JSON web token will be sent back to the client containing some
  * of the users account information.
  *
- * expected json object format
+ * Expected JSON object format
  * {
  *     username: string,
  *     password: string
@@ -67,7 +66,7 @@ exports.login = async (request, response) => {
     // Validate password in request.body
     try {
         // Hashes password and compares it to the user.password hash
-        const match = await bcrypt.compare(password, user.password)
+        const match = await user.comparePasswords(password)
 
         if (!match) {
             // passwords do not match. Create error payload
@@ -82,22 +81,12 @@ exports.login = async (request, response) => {
         return response.status(500).json(payload)
     }
 
-    // JSON web token payload
-    const tokenPayload = {
-        data: userSerializers.userDetail(user)
-    }
-
-    // JSON web token header options
-    const tokenHeader = {
-        algorithm: authConfig.JWT_ENCRYPTION,
-        expiresIn: authConfig.JWT_EXPIRES_IN
-    }
 
     let token // JSON web token
 
     // Create and sign JSON web token
     try {
-        token = await jwt.sign(tokenPayload, authConfig.JWT_SECRET_KEY, tokenHeader)
+        token = await user.generateToken()
     } catch (error) {
         // Unexpected error
         const payload = new Payload(false, error.message)
@@ -115,7 +104,7 @@ exports.login = async (request, response) => {
  * Validates the data, encrypts the password and responses with a JSON object containing
  * the newly created user details.
  *
- * expected json object format
+ * Expected JSON object format
  * {
  *     username: string,
  *     password: string
@@ -149,11 +138,8 @@ exports.register = async (request, response) => {
 
     // Check is username is taken
     try {
-        // count the number of users with the username defined in request.body.username
-        const count = await User.countDocuments({ username: username })
-
         // user with the request.body.username already exists
-        if (count > 0) {
+        if (User.exists(username)) {
             const payload = new Payload(false, 'Username Already exists')
             payload.addError(
                 'username',
@@ -176,9 +162,6 @@ exports.register = async (request, response) => {
 
     // encrypt the password and save the user object
     try {
-        const salt = await bcrypt.genSalt(authConfig.SALT_ROUNDS)
-        user.password = await bcrypt.hash(request.body.password, salt)
-
         await user.save()
     }
     catch (error) {
@@ -187,8 +170,7 @@ exports.register = async (request, response) => {
         return response.status(500).json(payload)
     }
 
-    let serializedUser = userSerializers.userDetail(user)
-    const payload = new Payload(true, 'Successfully created user', serializedUser)
+    const payload = new Payload(true, 'Successfully created user', user.getDetail())
 
     return response.status(201).json(payload)
 }

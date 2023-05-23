@@ -1,6 +1,5 @@
 const User = require('../models/User')
 const Payload = require('../models/Payload')
-const userSerializers = require('../serializers/userSerializers')
 
 const handleError = (request, response, error) => {
     let data = {
@@ -45,33 +44,26 @@ const handleError = (request, response, error) => {
  */
 exports.get = async (request, response) => {
 
-
-    // Check if user exists
-    try {
-        const count = User.countDocuments({_id: request.params.userId})
-
-        if (count === 0) {
-            // User does not exist
-            const payload = new Payload(false, `User with the user id (${request.params.userId}) does not exists`)
-            return response.status(404).json(payload)
-        }
-    } catch(error) {
-        // unexpected error
-        return handleError(request, response, error)
-    }
-
-    let user
+    // Get the users ID from query parameter
+    const id = request.params.userId
+    let user // User object will be stored here
 
     // Get user
     try {
-        user = await User.findOne({_id: request.params.userId})
+        user = await User.findOne({_id: id})
+
+        // User does not exist
+        if (user == null) {
+            const payload = new Payload(false, `User with the user id (${request.params.userId}) does not exists`)
+            return response.status(404).json(payload)
+        }
     }
     catch(error) {
        return handleError(request, response, error)
     }
 
-    let serializedUser = userSerializers.userDetail(user)
-    const payload = new Payload(true, 'Successfully retrieved user', serializedUser)
+
+    const payload = new Payload(true, 'Successfully retrieved user', user.getDetail())
 
     return response.status(200).jsonp(payload)
 }
@@ -86,95 +78,52 @@ exports.get = async (request, response) => {
  */
 exports.delete = async (request, response) => {
 
+    let user
+
+    // Try and delete use with the user id defined in request.params.userId
     try {
-        let user = await User.deleteOne({_id: request.params.userId})
-
-        if (user.deletedCount === 0) {
-            const payload = new Payload(false, 'User Does not exists')
-            payload.addError('id', `User with the ID ${request.params.userId} does not exist`)
-            return response.status(404).json(payload)
-        }
-
-        const payload = new Payload(true, 'Successfully deleted user')
-
-        return response.status(204).json(payload)
+        user = await User.deleteOne({_id: request.params.userId})
     }
     catch(error) {
         return handleError(request, response, error)
     }
 
+    if (user.deletedCount === 0) {
+        // User does not exist
+        const payload = new Payload(false, 'User Does not exists')
+        payload.addError('id', `User with the ID ${request.params.userId} does not exist`)
+
+        return response.status(404).json(payload)
+    }
+
+    const payload = new Payload(true, 'Successfully deleted user')
+
+    return response.status(204).json(payload)
+
 }
 
+/**
+ * GET method that gets all users in the system. returns a
+ * JSON object of all users
+ *
+ * @param request
+ * @param response
+ * @returns {Promise<*>}
+ */
 exports.list = async (request, response) => {
+
+    // Get all users
     let users = await User.find()
-    users = users.map(user => userSerializers.userDetail(user))
 
-    return response.jsonp(users)
-}
+    // serialize user objects
+    users = users.map(user => user.getDetail())
 
-exports.create = async (request, response) => {
-
-    const user = new User({
-        username: request.body.username,
-        password: request.body.password
-    })
-
-    try {
-        await user.save()
-
-        let serializedUser = userSerializers.userDetail(user)
-
-        const data = {
-            success: true,
-            payload: {
-                data: serializedUser
-            },
-            message: 'Successfully create user'
-        }
-
-        return response.status(201).jsonp(data)
-    }
-    catch (error) {
-        const duplicateKeyErrorCode = 11000
-
-        let data = {
-            success: false,
-            payload: {
-                errors: []
-            },
-            message: error.message
-        }
-
-        if (error.name === 'MongoServerError') {
-            if (error.code === duplicateKeyErrorCode) {
-                data.payload.errors.push({
-                    field: 'username',
-                    message: `a user with the username ${request.body.username} already exists`
-                })
-            }
-
-            data.message = 'Mongo server error'
-
-            return response.status(400).jsonp(data)
-        }
-
-        if (error.name === 'ValidationError') {
-            for (let field in error.errors) {
-                data.payload.errors.push({
-                    field: field,
-                    message: `${field} is a required field`
-                })
-            }
-
-            data.message = 'Validation error'
-
-            return response.status(400).jsonp(data)
-        }
-
-        data.message = 'Unexpected server error'
-
-        return response.status(500).jsonp(data)
-
+    if (users.length === 0) {
+        const payload = new Payload(true, 'There a are currently no users in the system')
+        return response.status(204).json(payload)
     }
 
+    const payload = new Payload(true, `Successfully retrieved ${users.length} users`, users)
+
+    return response.status(200).json(payload)
 }

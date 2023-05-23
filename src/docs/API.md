@@ -115,7 +115,7 @@ DELETE /user/:userId
 ## Authentication Endpoints
 
 ### Login
-Authenticates a user and return a JSON web token
+Authenticates a user and returns a JSON web token
 
 #### URL
 

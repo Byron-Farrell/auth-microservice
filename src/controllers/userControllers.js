@@ -96,9 +96,7 @@ exports.delete = async (request, response) => {
         return response.status(404).json(payload)
     }
 
-    const payload = new Payload(true, 'Successfully deleted user')
-
-    return response.status(204).json(payload)
+    return response.status(204).send()
 
 }
 

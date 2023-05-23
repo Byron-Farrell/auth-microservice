@@ -112,8 +112,6 @@ DELETE /user/:userId
 
 **Status Code:** 200
 
----
-
 ## Authentication Endpoints
 
 ### Login

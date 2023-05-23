@@ -1,19 +1,23 @@
 # auth-microservice
 
 ## Description
+A nodeJs microservice that provides token based authentication and user management
 
 ## Setup
 
+Create a .env from our template and make the necessary changes
 ```
 cp .env-example .env
 ```
 
+Install javascript packages
 ```
 npm install
 ```
 
 ## Run
 
+Run development server
 ```
 npm run dev
 ```

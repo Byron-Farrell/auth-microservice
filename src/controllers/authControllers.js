@@ -1,9 +1,5 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-
 const User = require('../models/User');
 const Payload = require('../models/Payload')
-const authConfig = require('../config/auth')
 
 /**
  * A POST method that takes a JSON object and validates the user information in said object.

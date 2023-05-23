@@ -61,6 +61,8 @@ GET /user/:userId
 ```
 **Status Code:** 200
 
+---
+
 ### Get All Users
 Gets a list of all user details
 
@@ -95,6 +97,8 @@ GET /user
 
 **Status Code:** 204
 
+---
+
 ### Delete a user by ID
 Deletes a by user ID
 
@@ -108,6 +112,7 @@ DELETE /user/:userId
 
 **Status Code:** 200
 
+---
 
 ## Authentication Endpoints
 
@@ -146,6 +151,8 @@ POST /auth/login
 ```
 
 **Status Code:** 200
+
+---
 
 ### Register User
 Creates a new user object

@@ -3,6 +3,7 @@
 ## Description
 A nodeJs microservice that provides token based authentication and user management
 
+For more information about the API endpoints please click [here](src/docs/API.md)
 ## Setup
 
 Create a .env from our template and make the necessary changes

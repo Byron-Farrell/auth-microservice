@@ -25,7 +25,7 @@ const JWT_EXPIRES_IN = '24h'
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 /**
- * Encryption algorithm used to encrypted JSON web tokens.
+ * Encryption algorithm used to encrypt JSON web tokens.
  *
  * @type {string}
  */

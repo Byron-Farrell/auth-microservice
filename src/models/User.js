@@ -23,7 +23,7 @@ const userSchema = new Schema({
 })
 
 
-// MongoDB pre save hook that hashes all users passwords before that are saved
+// MongoDB pre save hook that hashes all users passwords before they are saved
 userSchema.pre('save', async function(next) {
 
     // Password has not been modified. Not need to hash password.

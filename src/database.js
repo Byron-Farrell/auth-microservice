@@ -4,7 +4,7 @@ const { DATABASE_URI, DB_NAME } = require('./config/database')
 
 function databaseSetup() {
     mongoose.connect(DATABASE_URI)
-        .then(response => {
+        .then(result => {
             console.log(`Successfully connected to ${DB_NAME} mongodb database.`)
         })
         .catch(error => {

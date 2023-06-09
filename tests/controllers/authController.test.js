@@ -191,11 +191,11 @@ describe('Login', () => {
         return request(app)
             .post('/auth/login')
             .send(user)
+            .expect(200)
             .expect('Content-Type', /json/)
             .then(response => {
                 const data = JSON.parse(response.text)
                 const token = data.payload.data
-                console.log(data)
                 jwt.verify(token, authConfig.JWT_SECRET_KEY, (error, decoded)=> {
                     expect(error).toBeFalsy()
                 })

@@ -196,7 +196,7 @@ describe('Login', () => {
             .then(response => {
                 const data = JSON.parse(response.text)
                 const token = data.payload.data
-                conseol.log(data)
+                console.log(data)
                 jwt.verify(token, authConfig.JWT_SECRET_KEY, (error, decoded)=> {
                     expect(error).toBeFalsy()
                 })

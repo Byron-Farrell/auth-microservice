@@ -135,7 +135,7 @@ exports.register = async (request, response) => {
     // Check is username is taken
     try {
         // user with the request.body.username already exists
-        if (!User.exists(username)) {
+        if (await User.exists(username)) {
             const payload = new Payload(false, 'Username Already exists')
             payload.addError(
                 'username',

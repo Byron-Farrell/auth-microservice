@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest  tests/*",
+    "test-dev": "jest  tests/* --silent=false",
     "dev": "nodemon src/server.js"
   },
   "keywords": [],

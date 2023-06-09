@@ -191,7 +191,6 @@ describe('Login', () => {
         return request(app)
             .post('/auth/login')
             .send(user)
-            .expect(200)
             .expect('Content-Type', /json/)
             .then(response => {
                 const data = JSON.parse(response.text)

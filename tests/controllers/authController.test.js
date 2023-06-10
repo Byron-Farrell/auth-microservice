@@ -115,7 +115,7 @@ describe('Login', () => {
     }
 
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/test')
+        await mongoose.connect('mongodb://localhost:27017/loginTest')
 
         await request(app)
             .post('/auth/register')

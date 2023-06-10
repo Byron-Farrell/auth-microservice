@@ -8,7 +8,7 @@ describe('Get user list', () => {
     let token = null
 
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/userControllerTest')
+        await mongoose.connect('mongodb://localhost:27017/getUserListTest')
         const user1 = new User({username: 'user1', password: '123'})
         const user2 = new User({username: 'user2', password: '123'})
         await user1.save()
@@ -46,7 +46,7 @@ describe('Get user by ID', () => {
     let user1 = null
 
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/userControllerTest')
+        await mongoose.connect('mongodb://localhost:27017/getUserByIdTest')
         user1 = new User({username: 'user1', password: '123'})
         const user2 = new User({username: 'user2', password: '123'})
         await user1.save()
@@ -109,7 +109,7 @@ describe('Delete user by ID', () => {
     let user1 = null
 
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/userControllerTest')
+        await mongoose.connect('mongodb://localhost:27017/deleteUserByIdTest')
         user1 = new User({username: 'user1', password: '123'})
         const user2 = new User({username: 'user2', password: '123'})
         await user1.save()
@@ -151,6 +151,5 @@ describe('Delete user by ID', () => {
         let deletedUser = await User.findOne({_id: user1.id})
 
         expect(deletedUser).toBeNull()
-
     })
 })

@@ -8,7 +8,7 @@ const authConfig = require('../../src/config/auth')
 
 describe('Register user', () => {
     beforeAll(async () => {
-        await mongoose.connect('mongodb://localhost:27017/test')
+        await mongoose.connect('mongodb://localhost:27017/authControllerTest')
     })
 
     afterAll(async () => {

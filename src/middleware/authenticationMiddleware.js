@@ -31,7 +31,7 @@ exports.verifyToken = async (request, response, next) => {
         await jwt.verify(token, authConfig.JWT_SECRET_KEY)
     } catch (error) {
         // invalid JSON web token
-        let payload = new Q(false, error.message)
+        let payload = new Payload(false, error.message)
         return response.status(401).json(payload)
     }
 

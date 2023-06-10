@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { Schema, model } = require('mongoose')
-const authConfig = require('../config/auth')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { Schema, model } = require('mongoose');
+const authConfig = require('../config/auth');
 
 
 /**
@@ -10,52 +10,52 @@ const authConfig = require('../config/auth')
  * @type {module:mongoose.Schema}
  */
 const userSchema = new Schema({
-    username: {
-        type: String,
-        lowercase: true,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true
-    },
-})
+	username: {
+		type: String,
+		lowercase: true,
+		required: true,
+		unique: true,
+	},
+	password: {
+		type: String,
+		required: true
+	},
+});
 
 
 // MongoDB pre save hook that hashes all users passwords before they are saved
 userSchema.pre('save', async function(next) {
 
-    // Password has not been modified. Not need to hash password.
-    if (!this.isModified('password')) {
-        return next()
-    }
+	// Password has not been modified. Not need to hash password.
+	if (!this.isModified('password')) {
+		return next();
+	}
 
-    // Hash users password
-    try {
-        const salt = await bcrypt.genSalt(authConfig.SALT_ROUNDS)
-        this.password = await bcrypt.hash(this.password, salt)
-    } catch (error) {
-        next(error)
-    }
-})
+	// Hash users password
+	try {
+		const salt = await bcrypt.genSalt(authConfig.SALT_ROUNDS);
+		this.password = await bcrypt.hash(this.password, salt);
+	} catch (error) {
+		next(error);
+	}
+});
 
 
 userSchema.statics.exists = async function (username) {
-    const count = await User.countDocuments({ username: username })
+	const count = await User.countDocuments({ username: username });
 
-    return count > 0
-}
+	return count > 0;
+};
 
 
 userSchema.methods.generateToken = function () {
-    const options = {
-        algorithm: authConfig.JWT_ENCRYPTION,
-        expiresIn: authConfig.JWT_EXPIRES_IN
-    }
+	const options = {
+		algorithm: authConfig.JWT_ENCRYPTION,
+		expiresIn: authConfig.JWT_EXPIRES_IN
+	};
 
-    return jwt.sign(this.getDetail(), authConfig.JWT_SECRET_KEY, options)
-}
+	return jwt.sign(this.getDetail(), authConfig.JWT_SECRET_KEY, options);
+};
 
 
 /**
@@ -65,9 +65,9 @@ userSchema.methods.generateToken = function () {
  * @returns {{id: *, username: *}}
  */
 userSchema.methods.getDetail = function() {
-    const { _id, username } = this
+	const { _id, username } = this;
 
-    return { id: _id, username: username }
+	return { id: _id, username: username };
 };
 
 
@@ -80,8 +80,8 @@ userSchema.methods.getDetail = function() {
  * @returns {{username: *}}
  */
 userSchema.methods.getSanitizedUser = function() {
-    const { username } = this.toObject();
-    return { username };
+	const { username } = this.toObject();
+	return { username };
 };
 
 
@@ -92,12 +92,12 @@ userSchema.methods.getSanitizedUser = function() {
  * @returns {void|*}
  */
 userSchema.methods.comparePasswords = function (password) {
-    return bcrypt.compare(password, this.password)
-}
+	return bcrypt.compare(password, this.password);
+};
 
 
 // Creating user model object
-const User = model('User', userSchema)
+const User = model('User', userSchema);
 
 
 /**
@@ -105,4 +105,4 @@ const User = model('User', userSchema)
  *
  * @type {module:mongoose.model}
  */
-module.exports = User
+module.exports = User;

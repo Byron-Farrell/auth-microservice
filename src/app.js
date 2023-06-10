@@ -1,14 +1,14 @@
-const express = require('express')
-const authRoutes = require('./routes/authRoutes')
-const userRoutes = require('./routes/userRoutes')
-const authorizationMiddlewares = require('./middleware/authenticationMiddleware')
+const express = require('express');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const authorizationMiddlewares = require('./middleware/authenticationMiddleware');
 
-const app = express()
+const app = express();
 
-app.use(express.json())
-app.use('/auth', authRoutes)
-app.use(authorizationMiddlewares.verifyToken)
-app.use('/user', userRoutes)
+app.use(express.json());
+app.use('/auth', authRoutes);
+app.use(authorizationMiddlewares.verifyToken);
+app.use('/user', userRoutes);
 
-module.exports = app
+module.exports = app;
 

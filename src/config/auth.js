@@ -1,4 +1,4 @@
-require("dotenv").config()
+require('dotenv').config();
 
 /**
  * The number of salt rounds exponentially increases the time taken
@@ -7,14 +7,14 @@ require("dotenv").config()
  *
  * @type {number}
  */
-const SALT_ROUNDS = 10
+const SALT_ROUNDS = 10;
 
 /**
  * String representing the life span of a JWT token.
  *
  * @type {string}
  */
-const JWT_EXPIRES_IN = '24h'
+const JWT_EXPIRES_IN = '24h';
 
 /**
  * Key used in the symmetric encryption algorithm to encode and
@@ -22,14 +22,14 @@ const JWT_EXPIRES_IN = '24h'
  *
  * @type {string}
  */
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 /**
  * Encryption algorithm used to encrypt JSON web tokens.
  *
  * @type {string}
  */
-const JWT_ENCRYPTION = 'HS256'
+const JWT_ENCRYPTION = 'HS256';
 
 /**
  * Exported variables.
@@ -41,8 +41,8 @@ const JWT_ENCRYPTION = 'HS256'
  * @property {string} JWT_ENCRYPTION - JWT encryption algorithm.
  */
 module.exports = {
-    SALT_ROUNDS,
-    JWT_EXPIRES_IN,
-    JWT_SECRET_KEY,
-    JWT_ENCRYPTION
-}
+	SALT_ROUNDS,
+	JWT_EXPIRES_IN,
+	JWT_SECRET_KEY,
+	JWT_ENCRYPTION
+};

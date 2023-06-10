@@ -1,46 +1,46 @@
-require("dotenv").config()
+require('dotenv').config();
 
 /**
  * Database username used to authenticate the database connection
  *
  * @type {string}
  */
-const DB_USERNAME = process.env.DB_USERNAME
+const DB_USERNAME = process.env.DB_USERNAME;
 
 /**
  * Database password used to authenticate the database connection
  *
  * @type {string}
  */
-const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 /**
  * The name of the database that is to be connected to
  *
  * @type {string}
  */
-const DB_NAME = process.env.DB_NAME
+const DB_NAME = process.env.DB_NAME;
 
 /**
  * The port number the database is running on
  *
  * @type {string}
  */
-const DB_PORT = process.env.DB_PORT
+const DB_PORT = process.env.DB_PORT;
 
 /**
  * The host name or IP address of the database
  *
  * @type {string}
  */
-const DB_HOST = process.env.DB_HOST
+const DB_HOST = process.env.DB_HOST;
 
 /**
  *  Database connection URI
  *
  * @type {string}
  */
-const DATABASE_URI = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+const DATABASE_URI = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 
 /**
  * Exported variables.
@@ -52,8 +52,8 @@ const DATABASE_URI = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`
  * @property {string} DATABASE_URI - Database connection URI
  */
 module.exports = {
-    DB_NAME,
-    DB_PORT,
-    DB_HOST,
-    DATABASE_URI
-}
+	DB_NAME,
+	DB_PORT,
+	DB_HOST,
+	DATABASE_URI
+};

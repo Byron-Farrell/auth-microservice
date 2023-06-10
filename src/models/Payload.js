@@ -6,13 +6,13 @@
  * @param {Object} data - Any Object to be included on the response.
  */
 function Payload (success, message, data=undefined) {
-    this.success = success
-    this.message = message
-    this.payload = {}
+	this.success = success;
+	this.message = message;
+	this.payload = {};
 
-    if (data !== undefined) {
-        this.payload.data = data
-    }
+	if (data !== undefined) {
+		this.payload.data = data;
+	}
 }
 
 /**
@@ -22,12 +22,12 @@ function Payload (success, message, data=undefined) {
  */
 Payload.prototype.addError = function (field, message) {
 
-    // If payload does not have an error array create one
-    if (!Object.hasOwn(this.payload, 'errors')) {
-        this.payload.errors = []
-    }
+	// If payload does not have an error array create one
+	if (!Object.hasOwn(this.payload, 'errors')) {
+		this.payload.errors = [];
+	}
 
-    this.payload.errors.push({field, message})
-}
+	this.payload.errors.push({field, message});
+};
 
-module.exports = Payload
+module.exports = Payload;

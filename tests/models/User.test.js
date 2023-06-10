@@ -94,4 +94,10 @@ describe('User model', () => {
         expect(match).toBeFalsy()
     })
 
+    test('getSanitizedUser', async () => {
+        const user = new User({username: 'san', password: '123'})
+        await user.save()
+        const sanitizedUser = user.getSanitizedUser()
+        expect(sanitizedUser.password).toBeUndefined()
+    })
 })

@@ -8,7 +8,7 @@ Welcome to the API documentation for our service. Here you will find detailed in
 - [User Endpoints](#user-endpoints)
   - [Get User by ID](#get-user-by-id)
   - [Get All Users](#get-all-users)
-  - [Delete a user by ID](#delete-a-user-by-id)
+  - [Delete a User by ID](#delete-a-user-by-id)
 - [Authentication Endpoints](#authentication-endpoints)
   - [Login](#login)
   - [Register User](#register-user)
@@ -124,7 +124,7 @@ PATCH /user/:userId
 
 ---
 
-### Delete a user by ID
+### Delete a User by ID
 Deletes a by user ID
 
 #### URL

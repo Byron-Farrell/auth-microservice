@@ -7,7 +7,7 @@
     "test": "jest  tests/*",
     "test-dev": "jest  tests/* --silent=false",
     "dev": "nodemon src/server.js",
-    "lint": "eslint src/"
+    "lint": "eslint --fix src/"
   },
   "keywords": [],
   "author": "",

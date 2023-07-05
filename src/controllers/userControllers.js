@@ -54,7 +54,7 @@ exports.get = async (request, response) => {
 
 		// User does not exist
 		if (user == null) {
-			const payload = new Payload(false, `User with the user id (${request.params.userId}) does not exists`);
+			const payload = new Payload(false, `User with the user id (${request.params.userId}) does not exist`);
 			return response.status(404).json(payload);
 		}
 	}
@@ -136,11 +136,16 @@ exports.list = async (request, response) => {
 exports.patch = async (request, response) => {
 
 	// Get user ID from url parameter
-	const userId = request.params.userId
-	let user // user model
+	const userId = request.params.userId;
+	let user; // user model
 
 	try {
-		user = await User.findOne({_id: userId});
+		user = await User.findById({_id: userId});
+
+		if (!user) {
+			const payload = new Payload(true, `User with the user id (${userId}) does not exist`);
+			return response.status(404).json(payload);
+		}
 	}
 	catch(error) {
 		return handleError(request, response, error);
@@ -148,19 +153,30 @@ exports.patch = async (request, response) => {
 
 	// Check if password is in patch data
 	if (request.body.password) {
-		const payload = new Payload(false, 'Changing a users password using this endpoint is not allowed')
-		payload.addError('password', 'Not allowed to update users password')
+		const payload = new Payload(false, 'Changing a users password using this endpoint is not allowed');
+		payload.addError('password', 'Not allowed to update users password');
 
-		return response.status(405).json(payload)
+		return response.status(405).json(payload);
+	}
+
+	if (request.body.username) {
+		const userExists = await User.exists(request.body.username);
+
+		if (userExists) {
+			const payload = new Payload(false, 'Username already exists');
+			payload.addError('username', 'Username already exists');
+
+			return response.status(409).json(payload);
+		}
 	}
 
 	try {
-		await User.updateOne({_id: userId}, { $set: request.body })
+		await User.findOneAndUpdate({_id: userId}, { $set: request.body }, { runValidators: true });
 	}
 	catch(error) {
-		const payload = new Payload(false, error.message)
-		return response.status(500).json(payload)
+		const payload = new Payload(false, error.message);
+		return response.status(500).json(payload);
 	}
 
-	return response.status(204)
+	return response.status(204).send();
 };

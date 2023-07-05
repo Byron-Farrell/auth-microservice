@@ -190,10 +190,18 @@ describe('Patch user by ID', () => {
             .expect(400)
     })
 
+    test('Invalid user id type', () => {
+        return request(app)
+            .get('/user/123')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(400)
+    })
+
     test('Update username successfully', async () => {
 
         const newUsername = 'newUsername'
-        request(app)
+        await request(app)
             .patch(`/user/${user1.id}`)
             .set('Authorization', `Bearer ${token}`)
             .send({username: newUsername})
@@ -203,7 +211,7 @@ describe('Patch user by ID', () => {
 
         expect(patchedUser).toBeTruthy()
         expect(patchedUser.username).toBeDefined()
-        expect(patchedUser.username).toStrictEqual(newUsername)
+        expect(patchedUser.username).toStrictEqual(newUsername.toLowerCase())
     })
 
     test('Updated username already exists', () => {

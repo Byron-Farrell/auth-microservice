@@ -194,7 +194,7 @@ POST /auth/register
 ---
 
 ### Patch User
-Creates a new user object
+Partially update user object
 
 #### URL
 
@@ -213,8 +213,6 @@ PATCH /user/:userId
 ```
 
 #### Response
-
-###### body
 
 **Status Code:** 204
 

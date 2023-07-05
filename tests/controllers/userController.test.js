@@ -153,3 +153,79 @@ describe('Delete user by ID', () => {
         expect(deletedUser).toBeNull()
     })
 })
+
+describe('Patch user by ID', () => {
+
+    let token = null
+    let user1 = null
+
+    beforeAll(async () => {
+        await mongoose.connect('mongodb://localhost:27017/patchUserByIdTest')
+        user1 = new User({username: 'user1', password: '123'})
+        const user2 = new User({username: 'user2', password: '123'})
+        await user1.save()
+        await user2.save()
+
+        token = await user1.generateToken()
+    })
+
+    afterAll(async () => {
+        await User.deleteMany({})
+        await mongoose.disconnect()
+    })
+
+    test('Incorrect user id', () => {
+        return request(app)
+            .patch('/user/646a10d20af237cd0189e700')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(404)
+    })
+
+    test('Invalid user id type', () => {
+        return request(app)
+            .patch('/user/123')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(400)
+    })
+
+    test('Update username successfully', async () => {
+
+        const newUsername = 'newUsername'
+        request(app)
+            .patch(`/user/${user1.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({username: newUsername})
+            .expect(204)
+
+        const patchedUser = await User.findOne({_id: user1.id})
+
+        expect(patchedUser).toBeTruthy()
+        expect(patchedUser.username).toBeDefined()
+        expect(patchedUser.username).toStrictEqual(newUsername)
+    })
+
+    test('Updated username already exists', () => {
+        const newUsername = 'user2'
+        return request(app)
+            .patch(`/user/${user1.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({username: newUsername})
+            .expect(409)
+    })
+
+    test('Should not be allowed to patch password', async () => {
+
+        await request(app)
+            .patch(`/user/${user1.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({password: 'newPassword'})
+            .expect(405) // Not allowed
+
+        const user = await User.findOne({_id: user1.id})
+
+        expect(user).toBeTruthy()
+        expect(user.comparePasswords('123')).toBeTruthy()
+    })
+})

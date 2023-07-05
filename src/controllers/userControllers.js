@@ -17,7 +17,7 @@ const handleError = (request, response, error) => {
 		});
 		data.message = 'User Does not exists';
 
-		return response.status(400).jsonp(data);
+		return response.status(400).json(data);
 	}
 
 	if (error.name === 'CastError') {
@@ -27,11 +27,11 @@ const handleError = (request, response, error) => {
 		});
 		data.message = 'Invalid user ID';
 
-		return response.status(400).jsonp(data);
+		return response.status(400).json(data);
 	}
 
 	data.message = 'Unexpected server error';
-	return response.status(500).jsonp(error);
+	return response.status(500).json(error);
 };
 
 /**
@@ -65,7 +65,7 @@ exports.get = async (request, response) => {
 
 	const payload = new Payload(true, 'Successfully retrieved user', user.getDetail());
 
-	return response.status(200).jsonp(payload);
+	return response.status(200).json(payload);
 };
 
 /**
@@ -124,4 +124,43 @@ exports.list = async (request, response) => {
 	const payload = new Payload(true, `Successfully retrieved ${users.length} users`, users);
 
 	return response.status(200).json(payload);
+};
+
+/**
+ * Partially updates a user object with the user data in the request body
+ *
+ * @param request
+ * @param response
+ * @returns {Promise<*>}
+ */
+exports.patch = async (request, response) => {
+
+	// Get user ID from url parameter
+	const userId = request.params.userId
+	let user // user model
+
+	try {
+		user = await User.findOne({_id: userId});
+	}
+	catch(error) {
+		return handleError(request, response, error);
+	}
+
+	// Check if password is in patch data
+	if (request.body.password) {
+		const payload = new Payload(false, 'Changing a users password using this endpoint is not allowed')
+		payload.addError('password', 'Not allowed to update users password')
+
+		return response.status(405).json(payload)
+	}
+
+	try {
+		await User.updateOne({_id: userId}, { $set: request.body })
+	}
+	catch(error) {
+		const payload = new Payload(false, error.message)
+		return response.status(500).json(payload)
+	}
+
+	return response.status(204)
 };

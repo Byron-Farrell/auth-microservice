@@ -190,3 +190,31 @@ POST /auth/register
 ```
 
 **Status Code:** 201
+
+---
+
+### Patch User
+Creates a new user object
+
+#### URL
+
+```
+PATCH /user/:userId
+```
+
+#### Request
+
+###### body
+
+```json
+{
+  "username": "john.doe2",
+}
+```
+
+#### Response
+
+###### body
+
+**Status Code:** 204
+

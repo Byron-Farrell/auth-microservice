@@ -35,34 +35,6 @@ All requests will return a JSON object following the format below.
 ## User Endpoints
 
 
-### Get User by ID
-Gets user details by user ID
-
-#### URL
-
-```
-GET /user/:userId
-```
-
-#### Response
-
-###### body
-```json
-{
-  "success": true,
-  "message": "Successfully retrieved user",
-  "payload": {
-    "data": {
-      "id": "1",
-      "username": "john.doe"
-    }
-  }
-}
-```
-**Status Code:** 200
-
----
-
 ### Get All Users
 Gets a list of all user details
 
@@ -99,6 +71,59 @@ GET /user
 
 ---
 
+### Get User by ID
+Gets user details by user ID
+
+#### URL
+
+```
+GET /user/:userId
+```
+
+#### Response
+
+###### body
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved user",
+  "payload": {
+    "data": {
+      "id": "1",
+      "username": "john.doe"
+    }
+  }
+}
+```
+**Status Code:** 200
+
+---
+
+### Patch User
+Partially update user object
+
+#### URL
+
+```
+PATCH /user/:userId
+```
+
+#### Request
+
+###### body
+
+```json
+{
+  "username": "john.doe2",
+}
+```
+
+#### Response
+
+**Status Code:** 204
+
+---
+
 ### Delete a user by ID
 Deletes a by user ID
 
@@ -107,8 +132,6 @@ Deletes a by user ID
 ```
 DELETE /user/:userId
 ```
-
-#### Response
 
 **Status Code:** 200
 
@@ -190,29 +213,3 @@ POST /auth/register
 ```
 
 **Status Code:** 201
-
----
-
-### Patch User
-Partially update user object
-
-#### URL
-
-```
-PATCH /user/:userId
-```
-
-#### Request
-
-###### body
-
-```json
-{
-  "username": "john.doe2",
-}
-```
-
-#### Response
-
-**Status Code:** 204
-

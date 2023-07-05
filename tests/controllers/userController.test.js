@@ -214,6 +214,16 @@ describe('Patch user by ID', () => {
         expect(patchedUser.username).toStrictEqual(newUsername.toLowerCase())
     })
 
+    test('Update username successfully', async () => {
+
+        const newPassword = 'newPassword'
+        await request(app)
+            .patch(`/user/${user1.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({password: newPassword})
+            .expect(405)
+    })
+
     test('Updated username already exists', () => {
         const newUsername = 'user2'
         return request(app)

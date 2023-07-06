@@ -6,8 +6,9 @@ Welcome to the API documentation for our service. Here you will find detailed in
 
 - [JSON Response Format](#json-response-format)
 - [User Endpoints](#user-endpoints)
-  - [Get User by ID](#get-user-by-id)
   - [Get All Users](#get-all-users)
+  - [Get User by ID](#get-user-by-id)
+  - [Patch User](#patch-user)
   - [Delete a User by ID](#delete-a-user-by-id)
 - [Authentication Endpoints](#authentication-endpoints)
   - [Login](#login)
@@ -36,7 +37,23 @@ All requests will return a JSON object following the format below.
 
 
 ### Get All Users
-Gets a list of all user details
+Gets a list of all user details. /user supports paging with url query parameters. 
+
+#### Query Parameters
+
+Query parameters can be used to control pagination. If an incorrect value is passed to the query parameter the default values are used instead. When the page and limit values exceed the numbder of users the server will respond with a status code `204`.
+
+**page**
+
+`default: 1`
+
+Integer based value used to page through users in the system.
+
+**limit**
+
+`default: 10`
+
+Integer based value used to limit the number of users retrieved per page.
 
 #### URL
 
@@ -61,7 +78,8 @@ GET /user
       {
         "id": "2",
         "username": "john.doe"
-      }
+      },
+      ...
     ]
   }
 }

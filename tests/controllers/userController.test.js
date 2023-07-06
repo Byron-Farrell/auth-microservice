@@ -6,15 +6,21 @@ const User = require('../../src/models/User')
 describe('Get user list', () => {
 
     let token = null
+    const defaultPage = 1;
+    const defaultLimit = 10;
 
     beforeAll(async () => {
         await mongoose.connect('mongodb://localhost:27017/getUserListTest')
-        const user1 = new User({username: 'user1', password: '123'})
-        const user2 = new User({username: 'user2', password: '123'})
-        await user1.save()
-        await user2.save()
 
-        token = await user1.generateToken()
+        // Create 25 user accounts
+        for (let i = 0; i < 25; i++) {
+            const user = new User({username: `user${i + 1}`, password: '123'})
+            await user.save()
+        }
+
+        // create a user to generate JWT token
+        const user = await User.findOne();
+        token = await user.generateToken()
     })
 
     afterAll(async () => {
@@ -32,10 +38,149 @@ describe('Get user list', () => {
             .then(response => {
                 // Get response data
                 const data = JSON.parse(response.text)
+                const users = data.payload.data;
+
                 // Counting how many users were returned
                 const userCount = data.payload.data.length
-                expect(userCount).toStrictEqual(2)
+                expect(userCount).toStrictEqual(defaultLimit)
 
+                users.forEach( (user, index) => {
+                    expect(user.username).toStrictEqual(`user${index + 1}`)
+                })
+            })
+    })
+
+    test('Get first 3 users', () => {
+        return request(app)
+            .get('/user?limit=3')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text);
+                const users = data.payload.data;
+                // Counting how many users were returned
+                const userCount = data.payload.data.length;
+                expect(userCount).toStrictEqual(3);
+
+                expect(users[0].username).toStrictEqual('user1')
+                expect(users[1].username).toStrictEqual('user2')
+                expect(users[2].username).toStrictEqual('user3')
+            })
+    })
+
+    test('Get second page', () => {
+        return request(app)
+            .get('/user?page=2')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text);
+                const users = data.payload.data;
+
+                // Counting how many users were returned
+                const userCount = data.payload.data.length;
+                expect(userCount).toStrictEqual(defaultLimit);
+
+                users.forEach( (user, index) => {
+                    const usernameIndex = (index + 1) + 10;
+                    const expectedUsername = `user${usernameIndex}`
+
+                    expect(user.username).toStrictEqual(expectedUsername)
+                })
+            })
+    })
+
+    test('Get second  limit by 5', () => {
+        return request(app)
+            .get('/user?page=2&limit=5')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text);
+                const users = data.payload.data;
+
+                // Counting how many users were returned
+                const userCount = data.payload.data.length;
+                expect(userCount).toStrictEqual(5);
+
+                users.forEach( (user, index) => {
+                    const usernameIndex = (index + 1) + 5;
+                    const expectedUsername = `user${usernameIndex}`
+
+                    expect(user.username).toStrictEqual(expectedUsername)
+                })
+            })
+    })
+
+    test('page index overflow', () => {
+        return request(app)
+            .get('/user?page=100')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(204)
+    })
+
+    test('Get last page', () => {
+        return request(app)
+            .get('/user?page=3')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text);
+                const users = data.payload.data;
+
+                // Counting how many users were returned
+                const userCount = data.payload.data.length;
+                expect(userCount).toStrictEqual(5);
+
+                users.forEach( (user, index) => {
+                    const usernameIndex = (index + 1) + 20;
+                    const expectedUsername = `user${usernameIndex}`
+
+                    expect(user.username).toStrictEqual(expectedUsername)
+                })
+            })
+    })
+
+    test('Page number to be set to default when page number in request is invalid', () => {
+        // Send get request to retrieve all users.
+        return request(app)
+            .get('/user?page=a')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text)
+                const users = data.payload.data;
+
+                users.forEach( (user, index) => {
+                    expect(user.username).toStrictEqual(`user${index + 1}`)
+                })
+            })
+    })
+
+    test('Page number to be set to default when page number in request is invalid', () => {
+        // Send get request to retrieve all users.
+        return request(app)
+            .get('/user?limit=-1')
+            .set('Authorization', `Bearer ${token}`)
+            .expect('Content-Type', /json/)
+            .expect(200) // Response status code should be 200 (successful)
+            .then(response => {
+                // Get response data
+                const data = JSON.parse(response.text)
+
+                // Counting how many users were returned
+                const userCount = data.payload.data.length
+                expect(userCount).toStrictEqual(defaultLimit)
             })
     })
 })

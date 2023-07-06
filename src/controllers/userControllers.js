@@ -110,8 +110,33 @@ exports.delete = async (request, response) => {
  */
 exports.list = async (request, response) => {
 
+	const pageDefault = 1;
+	const limitDefault = 10;
+
+	let { page, limit } = request.query;
+
+	page = Number.parseInt(page);
+	limit = Number.parseInt(limit);
+
+	// Validate query values
+	const pageQueryParameterValid = page && Number.isSafeInteger(page) && page > 0;
+	const limitQueryParameterValid = limit && Number.isSafeInteger(limit) && limit > 0;
+
+	// No page query parameter found. Use default value
+	if (!pageQueryParameterValid) {
+		page = pageDefault;
+	}
+
+	// No limit query parameter found. Use default value
+	if (!limitQueryParameterValid) {
+		limit = limitDefault;
+	}
+
+	// Calculate how may documents need to be skipped
+	const skipCount = (page - 1) * limit;
+
 	// Get all users
-	let users = await User.find();
+	let users = await User.find().skip(skipCount).limit(limit);
 
 	// serialize user objects
 	users = users.map(user => user.getDetail());

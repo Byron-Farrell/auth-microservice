@@ -37,7 +37,7 @@ All requests will return a JSON object following the format below.
 
 
 ### Get All Users
-Gets a list of all user details. /user supports paging with url query parameters. 
+Gets a list of user details. /user supports paging with url query parameters. 
 
 #### Query Parameters
 

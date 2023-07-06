@@ -246,8 +246,6 @@ describe('Get user by ID', () => {
     })
 })
 
-
-
 describe('Delete user by ID', () => {
 
     let token = null

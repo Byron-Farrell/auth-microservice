@@ -170,7 +170,7 @@ POST /auth/login
 
 ```json
 {
-  "username": "Login successful",
+  "username": "john.doe",
   "password": "123"
 }
 ```
@@ -182,7 +182,7 @@ POST /auth/login
 ```json
 {
   "success": true,
-  "message": "Successfully retrieved user",
+  "message": "Login successful",
   "payload": {
     "data": "header.payload.signature"
   }

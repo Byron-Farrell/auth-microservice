@@ -14,7 +14,6 @@ const routes = {
     deleteUser: { path:'/user/:userId', method: 'DELETE', name: 'deleteUser' }
 }
 
-// TODO: unit test to check that all paths have a validation object
 const validations = {
 
     [routes.login.name]: {

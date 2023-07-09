@@ -22,3 +22,10 @@ Run development server
 ```
 npm run dev
 ```
+
+## Tests
+
+Run all unit tests
+```
+npm run tests
+```

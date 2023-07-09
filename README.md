@@ -27,5 +27,5 @@ npm run dev
 
 Run all unit tests
 ```
-npm run tests
+npm run test
 ```

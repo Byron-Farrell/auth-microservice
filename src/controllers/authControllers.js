@@ -17,7 +17,7 @@ const Payload = require('../models/Payload');
  * @returns {Promise<*>}
  */
 exports.login = async (request, response) => {
-
+	this.name = 'hellooooo';
 	const { username, password } = request.body;
 
 	// Checking if required fields exist

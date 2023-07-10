@@ -9,7 +9,7 @@ const app = express();
 
 
 app.use(express.json());
-// app.use(validationMiddleware.validations)
+app.use(validationMiddleware.validations)
 app.use(authRoutes);
 app.use(authorizationMiddlewares.verifyToken);
 app.use(userRoutes);

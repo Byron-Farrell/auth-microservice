@@ -13,7 +13,7 @@ app.use(validationMiddleware.validations)
 app.use(authRoutes);
 app.use(authorizationMiddleware.verifyToken);
 app.use(userRoutes);
-app.use(errorHandlersMiddleware.json);
+app.use(errorHandlersMiddleware.handleError);
 
 module.exports = app;
 

@@ -1,38 +1,6 @@
 const User = require('../models/User');
 const Payload = require('../models/Payload');
 
-const handleError = (request, response, error) => {
-	let data = {
-		success: false,
-		payload: {
-			errors: []
-		},
-		message: ''
-	};
-
-	if (error.name === 'TypeError') {
-		data.payload.errors.push({
-			field: 'id',
-			message: `User with the ID ${request.params.userId} does not exist`
-		});
-		data.message = 'User Does not exists';
-
-		return response.status(400).json(data);
-	}
-
-	if (error.name === 'CastError') {
-		data.payload.errors.push({
-			field: 'id',
-			message: `${request.params.userId} is not a valid user ID`
-		});
-		data.message = 'Invalid user ID';
-
-		return response.status(400).json(data);
-	}
-
-	data.message = 'Unexpected server error';
-	return response.status(500).json(error);
-};
 
 /**
  * GET method that gets a user defined by the userId url parameter
@@ -42,7 +10,7 @@ const handleError = (request, response, error) => {
  * @param response
  * @returns {Promise<*>}
  */
-exports.get = async (request, response) => {
+exports.get = async (request, response, next) => {
 
 	// Get the users ID from query parameter
 	const id = request.params.userId;
@@ -60,7 +28,7 @@ exports.get = async (request, response) => {
 		}
 	}
 	catch(error) {
-		return handleError(request, response, error);
+		return next(error)
 	}
 
 
@@ -77,7 +45,7 @@ exports.get = async (request, response) => {
  * @param response
  * @returns {Promise<*>}
  */
-exports.delete = async (request, response) => {
+exports.delete = async (request, response, next) => {
 
 	let user;
 
@@ -86,7 +54,7 @@ exports.delete = async (request, response) => {
 		user = await User.deleteOne({_id: request.params.userId});
 	}
 	catch(error) {
-		return handleError(request, response, error);
+		return next(error)
 	}
 
 	if (user.deletedCount === 0) {
@@ -159,7 +127,7 @@ exports.list = async (request, response) => {
  * @param response
  * @returns {Promise<*>}
  */
-exports.patch = async (request, response) => {
+exports.patch = async (request, response, next) => {
 
 	// Get user ID from url parameter
 	const userId = request.params.userId;
@@ -175,7 +143,7 @@ exports.patch = async (request, response) => {
 		}
 	}
 	catch(error) {
-		return handleError(request, response, error);
+		return next(error)
 	}
 
 	if (request.body.username) {

@@ -46,6 +46,7 @@ exports.get = async (request, response) => {
 
 	// Get the users ID from query parameter
 	const id = request.params.userId;
+
 	let user; // User object will be stored here
 
 	// Get user
@@ -162,6 +163,7 @@ exports.patch = async (request, response) => {
 
 	// Get user ID from url parameter
 	const userId = request.params.userId;
+
 	let user; // user model
 
 	try {
@@ -174,14 +176,6 @@ exports.patch = async (request, response) => {
 	}
 	catch(error) {
 		return handleError(request, response, error);
-	}
-
-	// Check if password is in patch data
-	if (request.body.password) {
-		const payload = new Payload(false, 'Changing a users password using this endpoint is not allowed');
-		payload.addError('password', 'Not allowed to update users password');
-
-		return response.status(405).json(payload);
 	}
 
 	if (request.body.username) {

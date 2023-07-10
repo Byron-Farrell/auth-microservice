@@ -20,24 +20,6 @@ exports.login = async (request, response) => {
 
 	const { username, password } = request.body;
 
-	// Checking if required fields exist
-	if (!username || !password) {
-		// Missing field(s). Create an error payload
-		const payload = new Payload(false, 'Validation error. Missing fields');
-
-		// Missing user field in body
-		if (!username) {
-			payload.addError('username', 'username is a required field');
-		}
-
-		// Missing password field in body
-		if (!password) {
-			payload.addError('password', 'password is a required field');
-		}
-
-		return response.status(404).json(payload);
-	}
-
 	let user; // user object retrieved from database
 
 	// Check if user exists
@@ -113,24 +95,6 @@ exports.login = async (request, response) => {
 exports.register = async (request, response) => {
 
 	const { username, password } = request.body;
-
-	// Checking if required fields exist
-	if (!username || !password) {
-		// Missing field(s). Create an error payload
-		const payload = new Payload(false, 'Validation error. Missing fields');
-
-		// Missing user field in body
-		if (!username) {
-			payload.addError('username', 'username is a required field');
-		}
-
-		// Missing password field in body
-		if (!password) {
-			payload.addError('password', 'password is a required field');
-		}
-
-		return response.status(404).json(payload);
-	}
 
 	// Check is username is taken
 	try {

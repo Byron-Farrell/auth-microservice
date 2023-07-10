@@ -3,6 +3,7 @@ const { routes } = require('../routes/routesConfig')
 
 exports.validations = (request, response, next) => {
 
+
 	// Convert routes object to an array
 	const routesArray = Object.entries(routes).map(element => {
 		return element[1]
@@ -14,49 +15,56 @@ exports.validations = (request, response, next) => {
 			return true
 		}
 
-		return false
+		return false;
 	})
 
-	const { path, name } = route
+	const { path, name } = route;
 
-	if (!path) {
-		// no match
-		// TODO: log this, all routes should have a validation object. maybe reject request?
-		next()
-	}
+	const validationFields = routes[name]?.validations?.fields;
 
-	// Get all required fields
-	const validationFields = routes[name]?.validations?.fields
-	let requiredFields = []
 
-	if (validationFields) {
-		// Create an array of all fields
-		const fields = Object.keys(validationFields)
+	if (request.method === 'POST') {
+		
+
+		if (!path) {
+			// no match
+			// TODO: log this, all routes should have a validation object. maybe reject request?
+			next()
+		}
 
 		// Get all required fields
-		requiredFields = fields.filter(field => routes[name].validations.fields[field].required)
-	}
+		let requiredFields = []
 
-	// Checking if validation object has required fields.
-	if (requiredFields.length > 0) {
+		if (validationFields) {
+			// Create an array of all fields
+			const fields = Object.keys(validationFields)
 
-		// Create a list of fields. If the field in the request body is also in the requiredFields array
-		// Add it to the requestBodyFields array.
-		let requestBodyFields = requiredFields.filter(field => field in request.body)
+			// Get all required fields
+			requiredFields = fields.filter(field => routes[name].validations.fields[field].required)
+		}
 
-		// Checking if body has all required fields
-		if (requestBodyFields.length !== requiredFields.length) {
-			//missing fields
-			const missingFields = requiredFields.filter(field => !requestBodyFields.includes(field));
+		// Checking if validation object has required fields.
+		if (requiredFields.length > 0) {
 
-			const payload = new Payload(false, 'Validation error. Missing fields');
-			for (index in missingFields) {
-				payload.addError(missingFields[index], `${missingFields[index]} is a required field`);
+			// Create a list of fields. If the field in the request body is also in the requiredFields array
+			// Add it to the requestBodyFields array.
+			let requestBodyFields = requiredFields.filter(field => field in request.body)
+
+			// Checking if body has all required fields
+			if (requestBodyFields.length !== requiredFields.length) {
+				//missing fields
+				const missingFields = requiredFields.filter(field => !requestBodyFields.includes(field));
+
+				const payload = new Payload(false, 'Validation error. Missing fields');
+				for (index in missingFields) {
+					payload.addError(missingFields[index], `${missingFields[index]} is a required field`);
+				}
+
+				return response.status(404).json(payload)
 			}
-
-			return response.status(404).json(payload)
 		}
 	}
+	
 
 	if (request.method === 'PATCH') {
 

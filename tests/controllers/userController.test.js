@@ -321,6 +321,7 @@ describe('Patch user by ID', () => {
         return request(app)
             .patch('/user/646a10d20af237cd0189e700')
             .set('Authorization', `Bearer ${token}`)
+            .send({username: 'user-1'})
             .expect('Content-Type', /json/)
             .expect(404)
     })

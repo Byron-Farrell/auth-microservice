@@ -22,16 +22,14 @@ exports.validations = (request, response, next) => {
 
 	const validationFields = routes[name]?.validations?.fields;
 
+	if (!path) {
+		// no match
+		// TODO: log this, all routes should have a validation object. maybe reject request?
+		next()
+	}
 
 	if (request.method === 'POST') {
-		
-
-		if (!path) {
-			// no match
-			// TODO: log this, all routes should have a validation object. maybe reject request?
-			next()
-		}
-
+	
 		// Get all required fields
 		let requiredFields = []
 

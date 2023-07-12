@@ -29,3 +29,5 @@ Run all unit tests
 ```
 npm run test
 ```
+
+## Lint

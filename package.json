@@ -1,16 +1,17 @@
 {
   "name": "authentication",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A token based authentication and authorization with user management microservice",
+  "main": "src/server.js",
   "scripts": {
     "test": "jest  tests/*",
     "test-dev": "jest  tests/* --silent=false",
     "dev": "nodemon src/server.js",
-    "lint": "eslint --fix src/"
+    "lint": "eslint src/",
+    "lint-fix": "eslint --fix src/"
   },
   "keywords": [],
-  "author": "",
+  "author": "Byron Farrell",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",

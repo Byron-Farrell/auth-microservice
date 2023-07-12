@@ -8,6 +8,7 @@ const Payload = require('../models/Payload');
  *
  * @param request
  * @param response
+ * @param next
  * @returns {Promise<*>}
  */
 exports.get = async (request, response, next) => {
@@ -28,7 +29,7 @@ exports.get = async (request, response, next) => {
 		}
 	}
 	catch(error) {
-		return next(error)
+		return next(error);
 	}
 
 
@@ -43,6 +44,7 @@ exports.get = async (request, response, next) => {
  *
  * @param request
  * @param response
+ * @param next
  * @returns {Promise<*>}
  */
 exports.delete = async (request, response, next) => {
@@ -54,7 +56,7 @@ exports.delete = async (request, response, next) => {
 		user = await User.deleteOne({_id: request.params.userId});
 	}
 	catch(error) {
-		return next(error)
+		return next(error);
 	}
 
 	if (user.deletedCount === 0) {
@@ -125,6 +127,7 @@ exports.list = async (request, response) => {
  *
  * @param request
  * @param response
+ * @param next
  * @returns {Promise<*>}
  */
 exports.patch = async (request, response, next) => {
@@ -143,7 +146,7 @@ exports.patch = async (request, response, next) => {
 		}
 	}
 	catch(error) {
-		return next(error)
+		return next(error);
 	}
 
 	if (request.body.username) {

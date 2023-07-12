@@ -1,4 +1,4 @@
-# auth-microservice
+# Shield
 
 ## Description
 A nodeJs microservice that provides token based authentication and user management
@@ -29,3 +29,5 @@ Run all unit tests
 ```
 npm run test
 ```
+
+## Lint

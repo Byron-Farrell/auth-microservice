@@ -71,7 +71,7 @@ View linting errors
 npm run lint
 ```
 
-fix linting errors
+Fix linting errors
 ```
 npm run lint-fix
 ```

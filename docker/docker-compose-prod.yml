@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  web:
+    build:
+      context: ./..
+      dockerfile: ./docker/Dockerfile
+      target: production
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+  db:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  mongodb:

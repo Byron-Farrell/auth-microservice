@@ -6,6 +6,7 @@ services:
       context: ./..
       dockerfile: ./docker/Dockerfile
       target: development
+    restart: "always"
     depends_on:
       - db
     ports:

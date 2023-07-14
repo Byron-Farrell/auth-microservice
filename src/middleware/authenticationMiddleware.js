@@ -1,6 +1,6 @@
 
 const jwt = require('jsonwebtoken');
-const Payload = require('../models/Payload');
+const Payload = require('../utility/Payload');
 const authConfig = require('../config/auth');
 
 /**

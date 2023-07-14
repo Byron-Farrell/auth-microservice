@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Payload = require('../models/Payload');
+const Payload = require('../utility/Payload');
 
 
 /**

@@ -1,3 +1,5 @@
+// TODO: move this to a utility directory
+
 /**
  * Represents a json response object.
  * @constructor
@@ -29,5 +31,6 @@ Payload.prototype.addError = function (field, message) {
 
 	this.payload.errors.push({field, message});
 };
+
 
 module.exports = Payload;

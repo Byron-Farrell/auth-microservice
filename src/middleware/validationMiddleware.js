@@ -1,4 +1,4 @@
-const Payload = require('../models/Payload');
+const Payload = require('../utility/Payload');
 const { routes } = require('../routes/routesConfig');
 
 exports.validations = (request, response, next) => {

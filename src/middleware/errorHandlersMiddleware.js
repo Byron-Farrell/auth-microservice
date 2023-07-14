@@ -1,4 +1,4 @@
-const Payload = require('../models/Payload');
+const Payload = require('../utility/Payload');
 
 exports.handleError = (error, request, response, next) => {
 

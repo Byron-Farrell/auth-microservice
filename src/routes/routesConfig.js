@@ -37,7 +37,8 @@ const routes = {
 	listUsers: {
 		path:'/user',
 		method: 'GET',
-		name: 'listUsers'
+		name: 'listUsers',
+		permissions: ['is_owner', 'is_admin']
 	},
 
 	getUser: {

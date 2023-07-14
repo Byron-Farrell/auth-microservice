@@ -1,4 +1,4 @@
-const Payload = require('../../src/models/Payload')
+const Payload = require('../../src/utility/Payload')
 describe('Payload model', () => {
 
     test('success field should exist', () => {

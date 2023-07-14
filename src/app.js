@@ -7,7 +7,6 @@ const validationMiddleware = require('./middleware/validationMiddleware');
 
 const app = express();
 
-
 app.use(express.json());
 app.use(validationMiddleware.validations);
 app.use(authRoutes);

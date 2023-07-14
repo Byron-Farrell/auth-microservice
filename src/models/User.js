@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Schema, model } = require('mongoose');
+const { Schema, model, mongoose } = require('mongoose');
 const authConfig = require('../config/auth');
-
+const { Role } = require('./Role');
 
 /**
  * A mongoose schema that defines a user in the system
@@ -20,13 +20,22 @@ const userSchema = new Schema({
 		type: String,
 		required: true
 	},
+	role: {
+		type: mongoose.Types.ObjectId,
+		ref: 'Role',
+		default: null
+	}
 });
 
 
 // MongoDB pre save hook that hashes all users passwords before they are saved
 userSchema.pre('save', async function(next) {
 
-	// Password has not been modified. Not need to hash password.
+	if (this.role == null) {
+		this.role = await Role.findOne({name: 'user'})
+	}
+
+	// Password has not been modified. No need to hash password.
 	if (!this.isModified('password')) {
 		return next();
 	}
@@ -65,16 +74,16 @@ userSchema.methods.generateToken = function () {
  * @returns {{id: *, username: *}}
  */
 userSchema.methods.getDetail = function() {
-	const { _id, username } = this;
+	const { _id, username, role } = this;
 
-	return { id: _id, username: username };
+	return { id: _id, username: username, role: role.name };
 };
 
 
 /**
  * A user schema instance method that returns a sanitized
  * object of the user model. A sanitized object is an object
- * containing all the user fields expected for sensitive fields
+ * containing all the user fields except for sensitive fields
  * e.g. password
  *
  * @returns {{username: *}}
